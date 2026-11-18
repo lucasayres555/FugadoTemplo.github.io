@@ -1,0 +1,263 @@
+body{
+    height:928px;
+    background-image: linear-gradient(to bottom, skyblue, #E5F3FF);
+    overflow: hidden;
+}
+
+.ponte1, .ponte2, .ponte3 {
+    width: 20%;
+    height: 140%;
+    position: absolute;
+    bottom: -20%;
+    background-image: url("https://imgur.com/aX1QE9c.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.ponte1 {
+    left: 10%;
+}
+
+.ponte2 {
+    left: 40%;
+}
+
+.ponte3 {
+    left: 70%;
+}
+
+@keyframes cicloNuvens {
+    from {
+        transform: translateX(-300px);
+    }
+
+    to {
+        transform: translateX(calc(100vw + 300px));
+    }
+}
+
+@keyframes animacaoPuloPersonagemDireita {
+    0%   { transform: translate(var(--posicaoX, 0px), 0); }
+    16%  { transform: translate(calc(var(--posicaoX, 0px) + 94px), -60px); }
+    33%  { transform: translate(calc(var(--posicaoX, 0px) + 188px), -100px); }
+    50%  { transform: translate(calc(var(--posicaoX, 0px) + 282px), -120px); }
+    67%  { transform: translate(calc(var(--posicaoX, 0px) + 376px), -100px); }
+    83%  { transform: translate(calc(var(--posicaoX, 0px) + 470px), -60px); }
+    100% { transform: translate(calc(var(--posicaoX, 0px) + 564px), 0); }
+}
+
+@keyframes animacaoPuloPersonagemEsquerda {
+    0%   { transform: translate(var(--posicaoX, 0px), 0); }
+    16%  { transform: translate(calc(var(--posicaoX, 0px) - 94px), -60px); }
+    33%  { transform: translate(calc(var(--posicaoX, 0px) - 188px), -100px); }
+    50%  { transform: translate(calc(var(--posicaoX, 0px) - 282px), -120px); }
+    67%  { transform: translate(calc(var(--posicaoX, 0px) - 376px), -100px); }
+    83%  { transform: translate(calc(var(--posicaoX, 0px) - 470px), -60px); }
+    100% { transform: translate(calc(var(--posicaoX, 0px) - 564px), 0); }
+}
+
+@keyframes animacaoObstaculo{
+    from{top: -150px; }
+    to{top: 100%; }
+}
+
+@keyframes animacaoMoeda{
+    from{top: -150px; }
+    to{top: 100%; }
+}
+
+.nuvensgrupo {
+    position: absolute;
+    width: 100%;
+    height: 500px;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.nuvem {
+    position: absolute;
+    height: auto;
+    opacity: 0.8;
+    animation-name: cicloNuvens;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.nuvem1 {
+    width: 180px;
+    top: 30px;
+    animation-duration: 25s;
+    animation-delay: -5s;
+}
+
+.nuvem2 {
+    width: 230px;
+    top: 100px;
+    animation-duration: 35s;
+    animation-delay: -20s;
+}
+
+.nuvem3 {
+    width: 150px;
+    top: 160px;
+    animation-duration: 20s;
+    animation-delay: -12s;
+}
+
+.nuvem4 {
+    width: 260px;
+    top: 230px;
+    animation-duration: 30s;
+    animation-delay: -3s;
+}
+
+.nuvem5 {
+    width: 190px;
+    top: 295px;
+    animation-duration: 28s;
+    animation-delay: -15s;
+}
+
+.nuvem6 {
+    width: 200px;
+    top: 400px;
+    animation-duration: 32s;
+    animation-delay: -10s;
+}
+
+img#personagem {
+    position: absolute;
+    width: 125px;
+    height: 165px;
+    bottom: 100px;
+    left: 50%;
+    margin-left: -62.5px;
+    z-index: 1;
+    transform: translate(var(--posicaoX, 0px), 0);
+}
+
+img#obstaculo{
+    position:absolute;
+    width: 150px;
+    height: 150px;
+    z-index: 1;
+    display: none;
+}
+
+img#obstaculo2{
+    position:absolute;
+    width: 150px;
+    height: 150px;
+    z-index: 1;
+    display: none;
+}
+
+img#gameover{
+    visibility: hidden;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+}
+
+img#moeda{
+    display: none;
+}
+
+button#botaogameover{
+    position: absolute;
+    border: none;
+    background-color:#ad8a29;
+    visibility: hidden;
+    width: 320px;
+    height:80px;
+    font-size:20px;
+    font-family:fantasy;
+    border:5px solid #6b4900;
+    top: 65%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+}
+
+button#botaoretornar{
+    position: absolute;
+    border: none;
+    background-color:#ad8a29;
+    visibility: hidden;
+    width: 320px;
+    height:80px;
+    font-size:20px;
+    font-family:fantasy;
+    border:5px solid #6b4900;
+    top: 65%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+}
+
+button#botaogameover:hover{
+    background-color:#c5942c;
+    border:5px solid #b36602;
+}
+
+button#botaoretornar:hover{
+    background-color:#c5942c;
+    border:5px solid #b36602;
+}
+
+.moedapercorrendo {
+   display: block !important;
+    animation: animacaoMoeda 4s linear forwards;
+    position: absolute;
+    width: 140px;
+    height: 80px;
+    object-fit: fill;
+    z-index: 2;
+}
+
+.obstaculopercorrendo {
+    display: block !important;
+    animation: animacaoObstaculo 4s linear forwards;
+}
+.pularesquerda{
+    animation: animacaoPuloPersonagemEsquerda 1s linear forwards;
+}
+
+.pulardireita{
+    animation: animacaoPuloPersonagemDireita 1s linear forwards;
+}
+
+#painelMoedas {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    font-family: fantasy;
+}
+
+#painelTempo {
+    position: absolute;
+    top: 60px;
+    left: 20px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    font-family: fantasy;
+}
+
+#painelMoedas img {
+    width: 70px;
+    height: 42px;
+    object-fit: fill;
+}

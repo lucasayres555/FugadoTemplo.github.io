@@ -1,0 +1,376 @@
+let personagem = document.getElementById('personagem');
+let obstaculo = document.getElementById('obstaculo');
+let obstaculo2 = document.getElementById('obstaculo2');
+let gameover = document.getElementById('gameover');
+let moeda = document.getElementById('moeda');
+let botaogameover = document.getElementById('botaogameover');
+let botaoretornar = document.getElementById('botaoretornar');
+let contadorMoedas = document.getElementById('contadorMoedas');
+let emexecucao = false;
+let Moedas = 0;
+let moedasRestantes = 0;
+let posicaoX = 0;
+let posicaoY = 0;
+let posponte = 2;
+let posopcponte = 0;
+let posopcponte2 = 0;
+let posopcponteM = 0;
+let qtdtempojogo = 180;
+let tmax = 4000;
+let tmin = 1500;
+let tmaxM = 3000;
+let tminM = 1000;
+let tempo = 4000;
+let tempo2 = 4000;
+let tempoM = 3000;
+let verificador = setInterval(verificarColisoes, 50);
+let imagemAtual = 0;
+let intervaloCaminhada;
+let intervaloTempo; 
+let jogoFinalizado = false;
+
+function obstaculos() {
+    if (jogoFinalizado) return;
+    let ponteopc1 = Math.floor(Math.random() * 3) + 1;
+    while (ponteopc1 == posopcponteM || ponteopc1 == posopcponte2) {
+    ponteopc1 = Math.floor(Math.random() * 3) + 1;
+}
+    posopcponte = ponteopc1
+    let ponteO = document.querySelector('.ponte' + ponteopc1);
+    let centralizadorO = ponteO.getBoundingClientRect().left + (ponteO.offsetWidth / 2);
+    obstaculo.style.left = (centralizadorO - 75) + 'px';
+    obstaculo.classList.remove('obstaculopercorrendo');
+    void obstaculo.offsetWidth;
+    obstaculo.classList.add('obstaculopercorrendo');
+    obstaculo.addEventListener('animationend', function() {
+        posopcponte = 0;
+        obstaculo.classList.remove('obstaculopercorrendo');
+        obstaculo.style.display = 'none';
+        tempo = Math.random() * (tmax - tmin) + tmin;
+        setTimeout(obstaculos, tempo);
+
+    }, { once: true });
+}
+
+function obstaculos2() {
+        if (jogoFinalizado) return;
+        let ponteopc3 = Math.floor(Math.random() * 3) + 1;
+        while (ponteopc3 == posopcponteM || ponteopc3 == posopcponte) {
+            ponteopc3 = Math.floor(Math.random() * 3) + 1;
+        }
+        posopcponte2 = ponteopc3
+        let ponteO2 = document.querySelector('.ponte' + ponteopc3);
+        let centralizadorO2 = ponteO2.getBoundingClientRect().left + (ponteO2.offsetWidth / 2);
+        obstaculo2.style.left = (centralizadorO2 - 75) + 'px';
+        obstaculo2.classList.remove('obstaculopercorrendo');
+        void obstaculo2.offsetWidth;
+        obstaculo2.classList.add('obstaculopercorrendo');
+        obstaculo2.addEventListener('animationend', function() {
+            posopcponte2 = 0;
+            obstaculo2.classList.remove('obstaculopercorrendo');
+            obstaculo2.style.display = 'none';
+            tempo2 = Math.random() * (tmax - tmin) + tmin;
+            setTimeout(obstaculos2, tempo2);
+        }, { once: true });
+}
+
+function finalizarMoeda(moedaAtual) {
+    if (moedaAtual.dataset.finalizada == 'true') {
+        return;
+    }
+
+    moedaAtual.dataset.finalizada = 'true';
+    moedaAtual.remove();
+
+    moedasRestantes--;
+
+    if (moedasRestantes == 0) {
+        posopcponteM = 0;
+        tempoM = Math.random() * (tmaxM - tminM) + tminM;
+        setTimeout(moedas, tempoM);
+    }
+}
+function moedas() {
+    if (jogoFinalizado) return;
+    let ponteopc2 = Math.floor(Math.random() * 3) + 1;
+    do{
+        ponteopc2 = Math.floor(Math.random() * 3) + 1;
+    }while(ponteopc2 == posopcponte || ponteopc2 == posopcponte2)
+    posopcponteM = ponteopc2; 
+    
+    let ponteM = document.querySelector('.ponte' + ponteopc2);
+
+    let centralizadorM = ponteM.offsetLeft + (ponteM.offsetWidth / 2);
+
+    let qtdM = 6 - Math.floor(Math.sqrt(Math.random() * 35));
+
+    moedasRestantes = qtdM;
+
+    for (let n = 0; n < qtdM; n++) {
+
+        let MoedaClonada = moeda.cloneNode(true);
+
+        MoedaClonada.removeAttribute('id');
+
+        MoedaClonada.style.left = (centralizadorM - 70) + 'px';
+
+        MoedaClonada.style.top = '-150px';
+        
+        document.body.appendChild(MoedaClonada);
+
+        MoedaClonada.style.animationDelay = (n * 0.5) + 's';
+
+        MoedaClonada.classList.add('moedapercorrendo');
+
+        MoedaClonada.addEventListener('animationend', function() {
+
+        finalizarMoeda(MoedaClonada);
+
+        }, { once: true });
+    }
+}
+setTimeout(moedas, 1500);
+setTimeout(obstaculos, 2500);
+
+function trocarImagem() {
+    personagem.src = 'https://imgur.com/j0c2X9Y.png';
+
+    setTimeout(function() {
+        personagem.src = 'https://imgur.com/QA4tr5e.png';
+    }, 2000);
+}
+
+function puloe() {
+            if(emexecucao){
+                return;
+            }
+
+    emexecucao = true;
+    clearInterval(intervaloCaminhada);
+    personagem.src = 'https://imgur.com/j0c2X9Y.png';
+
+    personagem.style.setProperty('--posicaoX', posicaoX + 'px')
+    
+    personagem.classList.remove('pularesquerda','pulardireita');
+
+    void personagem.offsetWidth;
+
+    personagem.classList.add('pularesquerda');
+            
+}
+function pulod() {
+    if(emexecucao){
+                return;
+            }
+
+    emexecucao = true;
+    clearInterval(intervaloCaminhada);
+    personagem.src = 'https://imgur.com/j0c2X9Y.png';
+
+    personagem.style.setProperty('--posicaoX', posicaoX + 'px')
+
+    personagem.classList.remove('pulardireita','pularesquerda');
+
+    void personagem.offsetWidth;
+
+    personagem.classList.add('pulardireita');
+}
+personagem.addEventListener('animationend', function() {
+    if (personagem.classList.contains('pularesquerda')) {
+        posicaoX -= 564;
+    }
+
+    if (personagem.classList.contains('pulardireita')) {
+        posicaoX += 564;
+    }
+
+    personagem.src = 'https://imgur.com/QA4tr5e.png';
+    iniciarAndamento();
+
+    personagem.classList.remove('pularesquerda', 'pulardireita');
+
+    personagem.style.setProperty('--posicaoX', posicaoX + 'px');
+
+    emexecucao = false;
+});
+
+function iniciarAndamento() {
+    imagemAtual = 0;
+
+    intervaloCaminhada = setInterval(function() {
+        if (imagemAtual == 0) {
+            personagem.src = 'https://imgur.com/j0c2X9Y.png';
+            imagemAtual = 1;
+        }
+        else {
+            personagem.src = 'https://imgur.com/QA4tr5e.png';
+            imagemAtual = 0;
+        }
+    }, 400);
+}
+
+function pararAndamento() {
+    clearInterval(intervaloCaminhada);
+    personagem.src = 'https://imgur.com/QA4tr5e.png';
+}
+
+document.addEventListener('keydown', function(escolha) {
+
+    if (emexecucao) return;
+
+    if (posponte == 2) {
+        if (escolha.key == 'ArrowLeft') {
+            console.log('Pulo ativado!');
+            puloe();
+            posponte--;
+        } else if (escolha.key == 'ArrowRight') {
+            console.log('Pulo ativado!');
+            pulod();
+            posponte++;
+        }
+    } else if (posponte == 1) {
+
+        if (escolha.key == 'ArrowRight') {
+            console.log('Pulo ativado!');
+            pulod();
+            posponte++;
+        }else if(escolha.key == 'ArrowLeft'){
+            posponte = 1;
+        }
+    } else if (posponte == 3) {
+
+        if (escolha.key == 'ArrowLeft') {
+            console.log('Pulo ativado!');
+            puloe();
+            posponte--;
+        }else if(escolha.key == 'ArrowRight'){
+            posponte = 3;
+        }
+    }
+});
+function detectarColisaoObstaculo(){
+    let pospersonagem = personagem.getBoundingClientRect()
+    let posobstaculo = obstaculo.getBoundingClientRect()
+    let posobstaculo2 = obstaculo2.getBoundingClientRect();
+    if (
+    (pospersonagem.left < posobstaculo.right && pospersonagem.right > posobstaculo.left && pospersonagem.top < posobstaculo.bottom && pospersonagem.bottom > posobstaculo.top ) || (pospersonagem.left < posobstaculo2.right && pospersonagem.right > posobstaculo2.left && pospersonagem.top < posobstaculo2.bottom && pospersonagem.bottom > posobstaculo2.top )
+) {
+        let posicaoObstaculoY = posobstaculo.top;
+        let posicaoObstaculo2Y = posobstaculo2.top;
+        let posicaoObstaculoX = posobstaculo.left;
+        let posicaoObstaculo2X = posobstaculo2.left;
+        let posicaoPersonagemY = pospersonagem.top;
+        let posicaoPersonagemX = pospersonagem.left;
+        let moedasNaTela = document.querySelectorAll('.moedapercorrendo');
+
+        jogoFinalizado = true;
+        moedasNaTela.forEach(function(moedaAtual) {
+            let posMoeda = moedaAtual.getBoundingClientRect();
+
+            moedaAtual.style.animation = 'none';
+            moedaAtual.style.top = posMoeda.top + 'px';
+            moedaAtual.style.left = posMoeda.left + 'px';
+        })
+        obstaculo.style.top = posicaoObstaculoY + 'px'
+        obstaculo.style.left = posicaoObstaculoX + 'px'
+        obstaculo.style.animation = 'none'
+
+        obstaculo2.style.top = posicaoObstaculo2Y + 'px'
+        obstaculo2.style.left = posicaoObstaculo2X + 'px'
+        obstaculo2.style.animation = 'none'
+
+        personagem.style.bottom = 'auto';
+        personagem.style.marginLeft = '0';
+        personagem.style.transform = 'none';
+        personagem.style.top = posicaoPersonagemY + 'px'
+        personagem.style.left = posicaoPersonagemX + 'px'
+        personagem.style.animation = 'none'
+
+        gameover.style.visibility = 'visible'
+
+        botaogameover.style.visibility = 'visible'
+        botaoretornar.style.visibility = 'visible'
+        
+        
+        clearInterval(verificador);
+        clearInterval(intervaloTempo);
+        clearInterval(intervaloCaminhada);
+        }
+}
+function detectarColisaoMoeda(){
+    let pospersonagemM = personagem.getBoundingClientRect()
+    let moedasNaTela = document.querySelectorAll('.moedapercorrendo');
+    moedasNaTela.forEach(function(moedaAtual){
+        let posmoeda = moedaAtual.getBoundingClientRect();
+        
+        if (
+        pospersonagemM.left < posmoeda.right && pospersonagemM.right > posmoeda.left && pospersonagemM.top < posmoeda.bottom && pospersonagemM.bottom > posmoeda.top
+    ){
+            finalizarMoeda(moedaAtual);
+
+            Moedas++;
+
+            contadorMoedas.textContent = Moedas;
+    }
+    }) 
+}
+function verificarColisoes() {
+    detectarColisaoObstaculo();
+    detectarColisaoMoeda();
+}
+intervaloTempo = setInterval(contandoTempo, 1000)
+function contandoTempo(){
+    qtdtempojogo--;
+    contadorTempo.textContent = qtdtempojogo;
+    let pospersonagemM = personagem.getBoundingClientRect()
+    let posobstaculoM = obstaculo.getBoundingClientRect();
+    let posobstaculo2M = obstaculo2.getBoundingClientRect();
+    if(qtdtempojogo == 90){
+        obstaculos2()
+    }
+    if(qtdtempojogo <= 0){
+
+        let posicaoObstaculoMY = posobstaculoM.top;
+        let posicaoObstaculo2MY = posobstaculo2M.top;
+        let posicaoObstaculoMX = posobstaculoM.left;
+        let posicaoObstaculo2MX = posobstaculo2M.left;
+        let posicaoPersonagemMY = pospersonagemM.top;
+        let posicaoPersonagemMX = pospersonagemM.left;
+        let moedasNaTela = document.querySelectorAll('.moedapercorrendo');
+
+        jogoFinalizado = true;
+        moedasNaTela.forEach(function(moedaAtual) {
+            let posMoeda = moedaAtual.getBoundingClientRect();
+
+            moedaAtual.style.animation = 'none';
+            moedaAtual.style.top = posMoeda.top + 'px';
+            moedaAtual.style.left = posMoeda.left + 'px';
+        })
+
+        gameover.style.visibility = 'visible';
+        botaogameover.style.visibility = 'visible';
+        botaoretornar.style.visibility = 'visible';
+
+        personagem.style.bottom = 'auto';
+        personagem.style.marginLeft = '0';
+        personagem.style.transform = 'none';
+        personagem.style.top = posicaoPersonagemMY + 'px'
+        personagem.style.left = posicaoPersonagemMX + 'px'
+        personagem.style.animation = 'none'
+
+        obstaculo.style.top = posicaoObstaculoMY + 'px'
+        obstaculo.style.left = posicaoObstaculoMX + 'px'
+        obstaculo.style.animation = 'none';
+
+        obstaculo2.style.top = posicaoObstaculo2MY + 'px'
+        obstaculo2.style.left = posicaoObstaculo2MX + 'px'
+        obstaculo2.style.animation = 'none';
+
+        clearInterval(verificador);
+        clearInterval(intervaloTempo);
+        clearInterval(intervaloCaminhada);
+        
+    }
+   
+}
+iniciarAndamento();
