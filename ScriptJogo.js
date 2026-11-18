@@ -29,6 +29,14 @@ let intervaloCaminhada;
 let intervaloTempo; 
 let jogoFinalizado = false;
 
+window.addEventListener('resize', function() {
+    if (!emexecucao) {
+        novoPulo();
+    }
+
+    ObjetosAtualizados();
+});
+
 function obstaculos() {
     if (jogoFinalizado) return;
     let ponteopc1 = Math.floor(Math.random() * 3) + 1;
@@ -36,9 +44,11 @@ function obstaculos() {
     ponteopc1 = Math.floor(Math.random() * 3) + 1;
 }
     posopcponte = ponteopc1
+    obstaculo.dataset.ponte = ponteopc1;
     let ponteO = document.querySelector('.ponte' + ponteopc1);
     let centralizadorO = ponteO.getBoundingClientRect().left + (ponteO.offsetWidth / 2);
-    obstaculo.style.left = (centralizadorO - 75) + 'px';
+    let larguraO = 150;
+    obstaculo.style.left = (centralizadorO - larguraO / 2) + 'px';
     obstaculo.classList.remove('obstaculopercorrendo');
     void obstaculo.offsetWidth;
     obstaculo.classList.add('obstaculopercorrendo');
@@ -59,9 +69,11 @@ function obstaculos2() {
             ponteopc3 = Math.floor(Math.random() * 3) + 1;
         }
         posopcponte2 = ponteopc3
+        obstaculo2.dataset.ponte = ponteopc3;
         let ponteO2 = document.querySelector('.ponte' + ponteopc3);
         let centralizadorO2 = ponteO2.getBoundingClientRect().left + (ponteO2.offsetWidth / 2);
-        obstaculo2.style.left = (centralizadorO2 - 75) + 'px';
+        let larguraO2 = 150;
+        obstaculo2.style.left = (centralizadorO2 - larguraO2 / 2) + 'px';
         obstaculo2.classList.remove('obstaculopercorrendo');
         void obstaculo2.offsetWidth;
         obstaculo2.classList.add('obstaculopercorrendo');
@@ -110,17 +122,19 @@ function moedas() {
 
         let MoedaClonada = moeda.cloneNode(true);
 
-        MoedaClonada.removeAttribute('id');
+        MoedaClonada.dataset.ponte = ponteopc2;
 
-        MoedaClonada.style.left = (centralizadorM - 70) + 'px';
+        MoedaClonada.removeAttribute('id');
 
         MoedaClonada.style.top = '-150px';
         
         document.body.appendChild(MoedaClonada);
+        
+        MoedaClonada.classList.add('moedapercorrendo');
+        
+        MoedaClonada.style.left = centralizadorM - (MoedaClonada.offsetWidth / 2) + 'px';
 
         MoedaClonada.style.animationDelay = (n * 0.5) + 's';
-
-        MoedaClonada.classList.add('moedapercorrendo');
 
         MoedaClonada.addEventListener('animationend', function() {
 
@@ -131,6 +145,57 @@ function moedas() {
 }
 setTimeout(moedas, 1500);
 setTimeout(obstaculos, 2500);
+
+function novoPulo() {
+    let ponte1 = document.querySelector('.ponte1').getBoundingClientRect();
+    let ponte2 = document.querySelector('.ponte2').getBoundingClientRect();
+
+    let distancia =
+        (ponte2.left + ponte2.width / 2) -
+        (ponte1.left + ponte1.width / 2);
+
+    personagem.style.setProperty('--posicaoX', ((posponte - 2) * distancia) + 'px');
+
+    personagem.style.setProperty('--pulo16', (distancia * 0.1667) + 'px');
+    personagem.style.setProperty('--pulo33', (distancia * 0.3333) + 'px');
+    personagem.style.setProperty('--pulo50', (distancia * 0.5) + 'px');
+    personagem.style.setProperty('--pulo67', (distancia * 0.6667) + 'px');
+    personagem.style.setProperty('--pulo83', (distancia * 0.8333) + 'px');
+    personagem.style.setProperty('--distanciaPulo', distancia + 'px');
+}
+
+function ObjetosAtualizados() {
+
+    function ObjetoAlinhado(objeto) {
+
+        let numeroPonte = objeto.dataset.ponte;
+
+        if (!numeroPonte) return;
+
+        let ponte = document.querySelector('.ponte' + numeroPonte);
+
+        let centro = ponte.getBoundingClientRect().left +
+                     (ponte.getBoundingClientRect().width / 2);
+
+        let largura = objeto.getBoundingClientRect().width;
+
+        objeto.style.left = (centro - largura / 2) + 'px';
+    }
+
+    if (obstaculo.classList.contains('obstaculopercorrendo')) {
+        ObjetoAlinhado(obstaculo);
+    }
+
+    if (obstaculo2.classList.contains('obstaculopercorrendo')) {
+        ObjetoAlinhado(obstaculo2);
+    }
+
+    let moedasNaTela = document.querySelectorAll('.moedapercorrendo');
+
+    moedasNaTela.forEach(function(moedaAtual) {
+        ObjetoAlinhado(moedaAtual);
+    });
+}
 
 function trocarImagem() {
     personagem.src = 'https://imgur.com/j0c2X9Y.png';
@@ -149,7 +214,7 @@ function puloe() {
     clearInterval(intervaloCaminhada);
     personagem.src = 'https://imgur.com/j0c2X9Y.png';
 
-    personagem.style.setProperty('--posicaoX', posicaoX + 'px')
+    novoPulo();
     
     personagem.classList.remove('pularesquerda','pulardireita');
 
@@ -167,7 +232,7 @@ function pulod() {
     clearInterval(intervaloCaminhada);
     personagem.src = 'https://imgur.com/j0c2X9Y.png';
 
-    personagem.style.setProperty('--posicaoX', posicaoX + 'px')
+    novoPulo();
 
     personagem.classList.remove('pulardireita','pularesquerda');
 
@@ -176,20 +241,13 @@ function pulod() {
     personagem.classList.add('pulardireita');
 }
 personagem.addEventListener('animationend', function() {
-    if (personagem.classList.contains('pularesquerda')) {
-        posicaoX -= 564;
-    }
-
-    if (personagem.classList.contains('pulardireita')) {
-        posicaoX += 564;
-    }
 
     personagem.src = 'https://imgur.com/QA4tr5e.png';
     iniciarAndamento();
 
     personagem.classList.remove('pularesquerda', 'pulardireita');
 
-    personagem.style.setProperty('--posicaoX', posicaoX + 'px');
+    novoPulo();
 
     emexecucao = false;
 });
@@ -373,4 +431,5 @@ function contandoTempo(){
     }
    
 }
+novoPulo();
 iniciarAndamento();

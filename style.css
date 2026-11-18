@@ -90,6 +90,11 @@ button#comecarjogo{
     transform: translate(-50%, -50%);
 }
 
+button#comecarjogo:hover{
+    background-color:#c5942c;
+    border:5px solid #b36602;
+}
+
 img#titulo{
     position: absolute;
     top: 25%;
