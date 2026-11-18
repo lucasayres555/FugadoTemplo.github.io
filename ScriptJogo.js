@@ -15,10 +15,10 @@ let posponte = 2;
 let posopcponte = 0;
 let posopcponte2 = 0;
 let posopcponteM = 0;
-let qtdtempojogo = 180;
-let tmax = 4000;
-let tmin = 1500;
-let tmaxM = 3000;
+let qtdtempojogo = 60;
+let tmax = 2500;
+let tmin = 1000;
+let tmaxM = 2500;
 let tminM = 1000;
 let tempo = 4000;
 let tempo2 = 4000;
@@ -143,8 +143,8 @@ function moedas() {
         }, { once: true });
     }
 }
-setTimeout(moedas, 1500);
-setTimeout(obstaculos, 2500);
+setTimeout(moedas, 1250);
+setTimeout(obstaculos, 1250);
 
 function novoPulo() {
     let ponte1 = document.querySelector('.ponte1').getBoundingClientRect();
@@ -356,7 +356,7 @@ function detectarColisaoObstaculo(){
         }
 }
 function detectarColisaoMoeda(){
-    let pospersonagemM = personagem.getBoundingClientRect()
+    let pospersonagemM = personagem.getBoundingClientRect() 
     let moedasNaTela = document.querySelectorAll('.moedapercorrendo');
     moedasNaTela.forEach(function(moedaAtual){
         let posmoeda = moedaAtual.getBoundingClientRect();
@@ -383,7 +383,7 @@ function contandoTempo(){
     let pospersonagemM = personagem.getBoundingClientRect()
     let posobstaculoM = obstaculo.getBoundingClientRect();
     let posobstaculo2M = obstaculo2.getBoundingClientRect();
-    if(qtdtempojogo == 90){
+    if(qtdtempojogo == 30){
         obstaculos2()
     }
     if(qtdtempojogo <= 0){

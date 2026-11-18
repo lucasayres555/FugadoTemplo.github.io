@@ -188,7 +188,7 @@ button#botaogameover{
     font-family:fantasy;
     border:5px solid #6b4900;
     top: 65%;
-    left: 40%;
+    left: 25%;
     transform: translate(-50%, -50%);
     z-index: 4;
 }
@@ -204,7 +204,7 @@ button#botaoretornar{
     font-family:fantasy;
     border:5px solid #6b4900;
     top: 65%;
-    left: 60%;
+    left: 75%;
     transform: translate(-50%, -50%);
     z-index: 4;
 }
@@ -221,7 +221,7 @@ button#botaoretornar:hover{
 
 .moedapercorrendo {
    display: block !important;
-    animation: animacaoMoeda 4s linear forwards;
+    animation: animacaoMoeda 2s linear forwards;
     position: absolute;
     width: 140px;
     height: 80px;
@@ -231,7 +231,7 @@ button#botaoretornar:hover{
 
 .obstaculopercorrendo {
     display: block !important;
-    animation: animacaoObstaculo 4s linear forwards;
+    animation: animacaoObstaculo 2s linear forwards;
 }
 .pularesquerda{
     animation: animacaoPuloPersonagemEsquerda 1s linear forwards;
